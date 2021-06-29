@@ -1,5 +1,5 @@
-# Kubernetes Installation
-# To Create a User in Ubuntu follow the below steps:
+### To Create a User in Ubuntu follow the below steps:
+```bash
 $ adduser username
 
 #Add the new user to the sudo group 
@@ -16,10 +16,12 @@ PasswordAuthentication yes
 
 sudo service ssh restart
 
-# Install Docker on all nodes (Both master and worker)
+```
 
-https://docs.docker.com/engine/install/ubuntu/
+### Install Docker on all nodes (`Both master and worker`)
 
+[Installing Docker on ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+```bash
 sudo apt-get update
 sudo apt-get install \
     apt-transport-https \
@@ -40,7 +42,11 @@ sudo apt-mark hold docker-ce
 sudo usermod -aG docker username
 sudo docker version
 
-# On all nodes, install kubeadm, kubelet, and kubectl. (Both master and worker)
+```
+
+### On all nodes, install kubeadm, kubelet, and kubectl. (`Both master and worker`)
+[Refer Here for Official documentation](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+```bash
 # Update the apt package index and install packages needed to use the Kubernetes apt repository:
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
@@ -55,8 +61,10 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 sudo apt-get update
 sudo apt-get install -y kubelet=1.19.1-00 kubeadm=1.19.1-00 kubectl=1.19.1-00
 sudo apt-mark hold kubelet kubeadm kubectl
+```
 
-# On the Kube master server (Master Only)
+### On the Kube master server (` Master Only `)
+```bash
 # Configure cgroup driver used by kubelet on control-plane.(Only on master node)
 	sudo docker info | grep -i cgroup
 
@@ -78,17 +86,25 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # If you need to generate a new tokem use the below command (Optional Not required , if you have the above token generated)
     sudo kubeadm token create --print-join-command
+```
 
-# Join the Worker nodes (Only on Worker Nodes)
+### Join the Worker nodes (`Only on Worker Nodes`)
+```bash
 Execute the command that is been generated as the output of the previous command, where we got the token generated. 
 It will be similar to the below command
 
 sudo kubeadm join 10.18.0.30:6443 --token 06fdx2qa.v2jxfdfdflapu54gi3s41 --discovery-token-ca-cert-hash sha256:ed92e6bdfd6d7e27abc8f9247d6de33a7dfd56b57a250195d57647bf3138c9a4e7d7a8
+```
 
-# Come back to Master node and executhe below commands (Only on Master Node)
+
+#### Come back to Master node and executhe below commands (` Only on Master Node `)
+```bash
+
 # Verify the cluster status by executing kubectl command on the master node
 kubectl get nodes
 
 #Install CNI so that pods can communicate across nodes and also Cluster DNS to start functioning. Apply weave CNI (Container Network Interface) on the master node
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 kubectl get nodes
+
+```
